@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const HeaderWrapper = styled.header`
   position: absolute;
@@ -13,27 +14,28 @@ const HeaderContainer = styled.section`
     justify-content: space-between;
     width: 90%;
     margin: auto;
-    background-color: var(--background-primary);
 
     box-shadow: 0px 5px 5px #00000014;
     border-radius: 30px;
+
+    backdrop-filter: blur(50px);
 `
 
-const HeaderLogo = styled.img`
+const Logo = styled.img`
   cursor: pointer;
-  height: 100%;
-  width: 100%;
+  height: 35px;
+  padding-top: 5px;
 `;
 
 const HeaderSVG = styled.svg`
-  width: 24px;
-  fill: var(--text-primary);
+  width: 14px;
+  fill: var(--text-fourth);
   margin: 0px 20px 0px 20px;
   cursor: pointer;
   transition-duration: .1s;
 
   &:hover {
-    fill: var(--text-fourth);
+    fill: var(--text-fifth);
   }
 `;
 
@@ -45,8 +47,10 @@ const MenuContainer = styled.div`
   top: 50px;
   background-color: var(--white);
   box-shadow: 0px 5px 5px #00000014;
-  width: 150px;
-  padding: 20px;
+  width: 200px;
+  padding: 5px;
+  z-index: 1;
+  border-radius: 5px;
 
   &:before {
     position: absolute;
@@ -57,25 +61,40 @@ const MenuContainer = styled.div`
     width: 20px;
     height: 20px;
     background-color: white;
+    z-index: -1;
   }
+
+  backdrop-filter: blur(5px);
 `
 
 const MenuLink = styled(Link)`
     display: flex;
     justify-content: space-between;
-    margin: 10px 0px;
+    align-items: center;
+    margin: 5px auto;
     text-decoration: none;
     text-transform: uppercase;
     font-family: 'Roboto Slab', serif;
     font-size: clamp(.2em, 4vw, 1em);
-    color: var(--text-terciary);
+    color: var(--text-fifth);
+    padding: 10px;
+    border-radius: 5px;
+
+    transition: all var(--def-transition-duration) ease-in-out;
 
     &:hover {
-      text-decoration: underline;
+      background-color: #f4f4f4;
+    }
+
+    &:hover::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background-color: black;
     }
 `
 
-const HeaderBottomDown = styled.hr `
+/* const HeaderBottomDown = styled.hr `
     color: var(--background-secondary);
     border: none;
     border-bottom: 2px solid var(--background-secondary);
@@ -83,24 +102,34 @@ const HeaderBottomDown = styled.hr `
     margin: 0px 20px 0px 20px;
     border-radius: 5px;
     margin-top: 3px;
-`
+` */
 
 export default function Header() {
+
+  const [isMenuOpen, setMenuOpen] = useState(false);
+
+  function toggleMenu() {
+    if(isMenuOpen) setMenuOpen(false);
+    else {
+      setMenuOpen(true);
+    }
+  }
+
   return (
     <HeaderWrapper>
       <HeaderContainer>
-          <MenuWrapper>
+          <MenuWrapper onClick={() => toggleMenu()}>
             <HeaderSVG
               xmlns="http://www.w3.org/2000/svg"
-              width="100%"
-              height="100%"
+              width="50%"
+              height="50%"
               fill="currentColor"
               class="bi bi-three-dots"
               viewBox="0 0 16 16"
             >
               <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
             </HeaderSVG>
-            <MenuContainer>
+            <MenuContainer style={{"display": isMenuOpen ? "block" : "none"}}>
               <MenuLink>
                 Tratamentos
               </MenuLink>
@@ -116,7 +145,7 @@ export default function Header() {
             </MenuContainer>
           </MenuWrapper>
           <Link to="/">
-              <HeaderLogo src="https://placehold.co/50x50" alt="" />
+              <Logo src="../../assets/logo.png" alt="Logo Suzsanna Regina Estetica" />
           </Link>
           <a href="https://web.whatsapp.com" target="_blank">
               <HeaderSVG
